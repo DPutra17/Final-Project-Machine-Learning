@@ -2,7 +2,7 @@
 
 ## 📌 Gambaran Proyek
 
-Proyek ini bertujuan untuk memprediksi hasil panen (_crop yield_) dalam ton/hektar berdasarkan faktor agroklimat (suhu, curah hujan, cuaca) dan manajemen lahan (jenis tanah, penggunaan pupuk). Proyek ini dikembangkan sebagai Tugas Besar mata kuliah Machine Learning I.
+Proyek ini bertujuan untuk memprediksi hasil panen dalam ton/hektar berdasarkan faktor agroklimat (suhu, curah hujan, cuaca) dan manajemen lahan (jenis tanah, penggunaan pupuk). Proyek ini dikembangkan sebagai Tugas Besar mata kuliah Machine Learning.
 
 **Metode Utama:**
 
