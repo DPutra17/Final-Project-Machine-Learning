@@ -1,15 +1,50 @@
 # Python cache
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
 
-# Jupyter Notebook checkpoints
+# Jupyter Notebook
 .ipynb_checkpoints
+*.ipynb_checkpoints
 
 # Virtual Environment
 env/
 venv/
 .env
+*.env
 
 # IDE settings
 .vscode/
 .idea/
+*.swp
+*.swo
+
+# Model files (hasil training)
+models/
+*.pkl
+*.joblib
+*.h5
+*.pb
+*.onnx
+*.json
+
+# Data files (processed data)
+data/X_train.csv
+data/X_test.csv
+data/y_train.csv
+data/y_test.csv
+data/*_processed.csv
+
+# Output files
+output/
+results/
+logs/
+
+# OS-specific
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Streamlit cache
+.streamlit/
