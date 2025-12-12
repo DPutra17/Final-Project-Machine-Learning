@@ -48,3 +48,6 @@ desktop.ini
 
 # Streamlit cache
 .streamlit/
+
+# Documents
+*.pdf
