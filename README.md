@@ -15,28 +15,46 @@ Proyek ini bertujuan untuk memprediksi hasil panen dalam ton/hektar berdasarkan 
 ```
 Final-Project-Machine-Learning/
 ├── data/
-│   ├── dataset_800.csv         # Dataset asli (800 sampel)
-│   ├── X_train.csv             # Data training features
-│   ├── X_test.csv              # Data testing features
-│   ├── y_train.csv             # Data training target
-│   └── y_test.csv              # Data testing target
+│   ├── dataset_800.csv                 # Dataset asli (800 sampel)
+│   ├── X_train.csv                     # Data training features
+│   ├── X_test.csv                      # Data testing features
+│   ├── y_train.csv                     # Data training target
+│   └── y_test.csv                      # Data testing target
 ├── notebooks/
-│   ├── EDA_Preprocessing.ipynb          # Exploratory Data Analysis
-│   ├── Baseline_Model.ipynb             # Model Baseline (Decision Tree)
-│   ├── Complete_ML_Pipeline.ipynb       # Pipeline Lengkap ML
-│   └── Final_Model_XGBoost.ipynb        # Model Final XGBoost
+│   ├── EDA_Preprocessing.ipynb         # Exploratory Data Analysis
+│   ├── Baseline_Model.ipynb            # Model Baseline (Decision Tree)
+│   ├── Complete_ML_Pipeline.ipynb      # Pipeline Lengkap ML
+│   └── Final_Model_XGBoost.ipynb       # Model Final XGBoost
 ├── models/
-│   ├── decision_tree.pkl       # Model Decision Tree
-│   ├── random_forest.pkl       # Model Random Forest
-│   ├── xgboost_model.json      # Model XGBoost
-│   ├── lightgbm_model.txt      # Model LightGBM
-│   ├── model_comparison.csv    # Perbandingan Metrik Model
-│   └── week_4_config.json      # Konfigurasi Model
+│   ├── decision_tree.pkl               # Model Decision Tree
+│   ├── random_forest.pkl               # Model Random Forest
+│   ├── xgboost_model.json              # Model XGBoost
+│   ├── lightgbm_model.txt              # Model LightGBM
+│   ├── model_comparison.csv            # Perbandingan Metrik Model
+│   └── week_4_config.json              # Konfigurasi Model
 ├── src/
-│   └── app.py                  # Aplikasi Streamlit
-├── requirements.txt            # Dependencies Python
-└── README.md                   # Dokumentasi Proyek
+│   ├── app.py                          # Aplikasi Streamlit (Legacy)
+│   ├── app_mvc.py                      # Aplikasi MVC (New) ⭐
+│   ├── config/                         # Konfigurasi
+│   │   └── settings.py                 # Settings & constants
+│   ├── models/                         # Layer Model (Data & Logic)
+│   │   ├── model_loader.py             # Load ML models
+│   │   └── data_loader.py              # Load datasets
+│   ├── views/                          # Layer View (UI Pages)
+│   │   ├── home.py                     # Home page
+│   │   └── __init__.py
+│   ├── components/                     # Komponen UI Reusable
+│   │   ├── sidebar.py                  # Sidebar navigation
+│   │   └── cards.py                    # Card components
+│   └── utils/                          # Helper Utilities
+│       ├── styling.py                  # CSS styling
+│       └── helpers.py                  # Helper functions
+├── requirements.txt                    # Dependencies Python
+├── README.md                           # Dokumentasi Proyek
+└── MVC_GUIDE_ID.md                     # Panduan MVC Architecture
 ```
+
+> **🆕 Arsitektur Baru:** Aplikasi sekarang menggunakan struktur **MVC (Model-View-Controller)** yang lebih modular dan maintainable. Lihat [MVC_GUIDE_ID.md](MVC_GUIDE_ID.md) untuk detail lengkap.
 
 ## 🚀 Cara Menjalankan
 
@@ -58,13 +76,20 @@ Final-Project-Machine-Learning/
    ```
 
 3. **Jalankan Aplikasi Streamlit:**
+   
+   **Opsi 1: Aplikasi MVC (Direkomendasikan) ⭐**
+   ```bash
+   streamlit run src/app_mvc.py
+   ```
+   
+   **Opsi 2: Aplikasi Legacy**
    ```bash
    streamlit run src/app.py
    ```
    
    Atau jika menggunakan Python secara langsung:
    ```bash
-   python -m streamlit run src/app.py
+   python -m streamlit run src/app_mvc.py
    ```
 
 4. **Akses Aplikasi:**
