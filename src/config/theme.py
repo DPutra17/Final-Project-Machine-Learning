@@ -416,10 +416,13 @@ def get_custom_css():
             color: #e0f2fe;
         }
 
-        /* Plotly background */
-        .js-plotly-plot, .js-plotly-plot .plotly, .js-plotly-plot .main-svg {
-            background: $bg_card !important;
-            border-radius: $radius_lg;
+        /* Plotly Charts - Minimal Styling */
+        div[data-testid="stPlotlyChart"] {
+            background: transparent;
+        }
+        
+        div[data-testid="stPlotlyChart"] > div {
+            background: transparent;
         }
 
         /* File Uploader */

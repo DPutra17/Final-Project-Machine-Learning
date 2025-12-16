@@ -91,15 +91,10 @@ def _render_metrics_comparison(metrics_df):
             xaxis_title='Model',
             yaxis_title='R² Score',
             height=400,
-            plot_bgcolor='#0e1626',
-            paper_bgcolor='#0e1626',
-            bargap=0.25,
-            font=dict(color='#e5e7eb', family='Inter'),
-            margin=dict(t=40, l=40, r=20, b=40),
-            xaxis=dict(gridcolor='#1f2937', zerolinecolor='#1f2937', showgrid=False, tickfont=dict(color='#e5e7eb')),
-            yaxis=dict(gridcolor='#1f2937', zerolinecolor='#1f2937', range=[0, 1], tickfont=dict(color='#e5e7eb'))
+            template='plotly_dark',
+            yaxis=dict(range=[0, 1])
         )
-        st.plotly_chart(fig, key='r2_chart', use_container_width=True)
+        st.plotly_chart(fig, use_container_width=True)
     
     with col2:
         # MAE Comparison
@@ -121,13 +116,9 @@ def _render_metrics_comparison(metrics_df):
             xaxis_title='Model',
             yaxis_title='MAE',
             height=400,
-            plot_bgcolor='#0b1220',
-            paper_bgcolor='#0b1220',
-            font=dict(color='#e5e7eb', family='Inter'),
-            xaxis=dict(gridcolor='#1f2937', zerolinecolor='#1f2937'),
-            yaxis=dict(gridcolor='#1f2937', zerolinecolor='#1f2937')
+            template='plotly_dark'
         )
-        st.plotly_chart(fig, key='mae_chart', use_container_width=True)
+        st.plotly_chart(fig, use_container_width=True)
     
     # RMSE and MAPE
     col1, col2 = st.columns(2)
@@ -148,13 +139,9 @@ def _render_metrics_comparison(metrics_df):
             xaxis_title='Model',
             yaxis_title='RMSE',
             height=400,
-            plot_bgcolor='#0b1220',
-            paper_bgcolor='#0b1220',
-            font=dict(color='#e5e7eb', family='Inter'),
-            xaxis=dict(gridcolor='#1f2937', zerolinecolor='#1f2937'),
-            yaxis=dict(gridcolor='#1f2937', zerolinecolor='#1f2937')
+            template='plotly_dark'
         )
-        st.plotly_chart(fig, key='rmse_chart', use_container_width=True)
+        st.plotly_chart(fig, use_container_width=True)
     
     with col2:
         if 'MAPE' in metrics_df.columns:
@@ -173,13 +160,9 @@ def _render_metrics_comparison(metrics_df):
                 xaxis_title='Model',
                 yaxis_title='MAPE (%)',
                 height=400,
-                plot_bgcolor='#0b1220',
-                paper_bgcolor='#0b1220',
-                font=dict(color='#e5e7eb', family='Inter'),
-                xaxis=dict(gridcolor='#1f2937', zerolinecolor='#1f2937'),
-                yaxis=dict(gridcolor='#1f2937', zerolinecolor='#1f2937')
+                template='plotly_dark'
             )
-            st.plotly_chart(fig, key='mape_chart', use_container_width=True)
+            st.plotly_chart(fig, use_container_width=True)
 
 
 def _render_detailed_analysis(models, metrics_df):
@@ -238,14 +221,10 @@ def _render_detailed_analysis(models, metrics_df):
                         yaxis_title='Predicted Yield (tons/ha)',
                         height=500,
                         hovermode='closest',
-                        plot_bgcolor='#0f172a',
-                        paper_bgcolor='#0f172a',
-                        font=dict(color='#e5e7eb', family='Inter'),
-                        xaxis=dict(gridcolor='#1f2937', showline=True, linewidth=1, linecolor='#1f2937'),
-                        yaxis=dict(gridcolor='#1f2937', showline=True, linewidth=1, linecolor='#1f2937')
+                        template='plotly_dark'
                     )
                     
-                    st.plotly_chart(fig, key='actual_vs_pred', use_container_width=True)
+                    st.plotly_chart(fig, use_container_width=True)
                     
                     # Residual Plot
                     residuals = y_test - y_pred
@@ -266,13 +245,9 @@ def _render_detailed_analysis(models, metrics_df):
                             xaxis_title='Predicted Values',
                             yaxis_title='Residuals',
                             height=400,
-                            plot_bgcolor='#0f172a',
-                            paper_bgcolor='#0f172a',
-                            font=dict(color='#e5e7eb', family='Inter'),
-                            xaxis=dict(gridcolor='#1f2937'),
-                            yaxis=dict(gridcolor='#1f2937')
+                            template='plotly_dark'
                         )
-                        st.plotly_chart(fig, key='residual_plot', use_container_width=True)
+                        st.plotly_chart(fig, use_container_width=True)
                     
                     with col2:
                         fig = go.Figure()
@@ -287,13 +262,9 @@ def _render_detailed_analysis(models, metrics_df):
                             xaxis_title='Residuals',
                             yaxis_title='Frequency',
                             height=400,
-                            plot_bgcolor='#0f172a',
-                            paper_bgcolor='#0f172a',
-                            font=dict(color='#e5e7eb', family='Inter'),
-                            xaxis=dict(gridcolor='#1f2937'),
-                            yaxis=dict(gridcolor='#1f2937')
+                            template='plotly_dark'
                         )
-                        st.plotly_chart(fig, key='residual_dist', use_container_width=True)
+                        st.plotly_chart(fig, use_container_width=True)
                     
                     # Save to session
                     st.session_state['predictions'] = y_pred
