@@ -61,9 +61,22 @@ Track accuracy metrics:
 
 ---
 
-## 🚀 Quick Start (3 Steps!)
+## 🚀 Quick Start
 
-### Step 1: Install Python
+### 🪟 Windows Users (Easiest Way!)
+
+**Just double-click these files:**
+
+1. **`install.bat`** - Installs all dependencies automatically
+2. **`run.bat`** - Starts the application
+
+**That's it!** 🎉 The app will open in your browser at `http://localhost:8501`
+
+---
+
+### 🐧 Manual Installation (All Platforms)
+
+#### Step 1: Install Python
 Make sure you have **Python 3.13+** installed.
 
 Check your version:
@@ -71,19 +84,19 @@ Check your version:
 python --version
 ```
 
-### Step 2: Install Dependencies
+#### Step 2: Install Dependencies
 ```bash
 pip install -r requirements.txt
 ```
 
 This will install all necessary libraries automatically.
 
-### Step 3: Run the App
+#### Step 3: Run the App
 ```bash
 streamlit run src/app.py
 ```
 
-**That's it!** 🎉 The app will open in your browser at `http://localhost:8501`
+The app will open in your browser at `http://localhost:8501`
 
 ---
 
