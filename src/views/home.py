@@ -4,11 +4,10 @@ Home page view
 import streamlit as st
 import plotly.graph_objects as go
 from models.data_loader import load_dataset, load_metrics
-from components.cards import gradient_card, feature_card
 
 
 def _inject_styles():
-    """Inject page-level styles for the dark theme."""
+    """Inject custom CSS styles"""
     st.markdown(
         """
         <style>
@@ -221,13 +220,16 @@ def render():
     cta1, cta2, cta3 = st.columns(3, gap="medium")
     with cta1:
         if st.button("🔮 Single Prediction", use_container_width=True):
-            st.session_state['selected_page'] = "🔮 Single Prediction"
+            st.query_params['page'] = 'prediction'
+            st.rerun()
     with cta2:
         if st.button("📈 Data Visualization", use_container_width=True):
-            st.session_state['selected_page'] = "📈 Data Visualization"
+            st.query_params['page'] = 'visualization'
+            st.rerun()
     with cta3:
         if st.button("🤖 Batch Prediction", use_container_width=True):
-            st.session_state['selected_page'] = "🤖 Batch Prediction"
+            st.query_params['page'] = 'batch'
+            st.rerun()
 
     st.markdown("<div style='margin: 2rem 0;'></div>", unsafe_allow_html=True)
     # Stats strip
@@ -236,7 +238,7 @@ def render():
     st.markdown("<div style='margin: 2.5rem 0;'></div>", unsafe_allow_html=True)
 
     # Feature highlights rail
-    st.markdown("<div id='explore-features'></div>", unsafe_allow_html=True)
+    st.markdown("<div></div>", unsafe_allow_html=True)
     st.markdown("### ✨ Why This Platform")
     st.markdown("""
     <div class='rail'>
@@ -436,43 +438,51 @@ def _render_call_to_action():
 
     with col1:
         st.markdown("""
+        <div id='single-prediction'></div>
         <div class='rail-card'>
             <h4>🔮 Single Prediction</h4>
             <p>Rapid scenario testing for one farm setup.</p>
         </div>
         """, unsafe_allow_html=True)
         if st.button("Open", key="btn_pred", use_container_width=True, type="primary"):
-            st.session_state['selected_page'] = "🔮 Single Prediction"
+            st.query_params['page'] = 'prediction'
+            st.rerun()
 
     with col2:
         st.markdown("""
+        <div id='data-visualization'></div>
         <div class='rail-card'>
             <h4>📈 Visualization</h4>
             <p>Interactive EDA and feature correlations.</p>
         </div>
         """, unsafe_allow_html=True)
         if st.button("Explore", key="btn_viz", use_container_width=True, type="primary"):
-            st.session_state['selected_page'] = "📈 Data Visualization"
+            st.query_params['page'] = 'visualization'
+            st.rerun()
 
     with col3:
         st.markdown("""
+        <div id='model-comparison'></div>
         <div class='rail-card'>
             <h4>⚖️ Model Comparison</h4>
             <p>Head-to-head metrics and prediction overlay.</p>
         </div>
         """, unsafe_allow_html=True)
         if st.button("Compare", key="btn_comp", use_container_width=True, type="primary"):
-            st.session_state['selected_page'] = "⚖️ Model Comparison"
+            st.query_params['page'] = 'comparison'
+            st.rerun()
 
     with col4:
         st.markdown("""
+        <div id='batch-prediction'></div>
         <div class='rail-card'>
             <h4>🤖 Batch Upload</h4>
             <p>Bulk predictions for CSV workloads.</p>
         </div>
         """, unsafe_allow_html=True)
         if st.button("Upload", key="btn_batch", use_container_width=True, type="primary"):
-            st.session_state['selected_page'] = "🤖 Batch Prediction"
+            st.query_params['page'] = 'batch'
+            st.rerun()
 
     st.markdown("<div style='margin: 2rem 0;'></div>", unsafe_allow_html=True)
 

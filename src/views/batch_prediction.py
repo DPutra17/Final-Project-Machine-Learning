@@ -3,7 +3,9 @@ Batch Prediction View
 """
 import streamlit as st
 import pandas as pd
+import numpy as np
 import plotly.graph_objects as go
+from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 from models.model_loader import load_models
 from models.data_loader import load_train_test_data
 
@@ -22,18 +24,158 @@ def render():
     
     st.info("📋 **Required columns:** Soil_Type, Crop, Rainfall_mm, Temperature_Celsius, Fertilizer_Used, Irrigation_Used, Weather_Condition, Days_to_Harvest")
     
+    # Option to use test dataset
+    use_test_data = st.checkbox("📊 Use Test Dataset (160 samples)", help="Automatically load X_test.csv for batch prediction")
+    
     col1, col2 = st.columns([2, 1])
     
     with col1:
-        uploaded_file = st.file_uploader("📁 Upload CSV File", type=['csv'])
+        if not use_test_data:
+            uploaded_file = st.file_uploader("📁 Upload CSV File", type=['csv'])
+        else:
+            uploaded_file = None
+            st.info("✓ Using test dataset: data/X_test.csv")
     
     with col2:
         selected_model = st.selectbox("🤖 Select Model", list(models.keys()))
     
-    if uploaded_file is not None:
+    if use_test_data:
+        _process_test_dataset(selected_model, models)
+    elif uploaded_file is not None:
         _process_uploaded_file(uploaded_file, selected_model, models)
     else:
         _show_sample_format()
+
+
+def _process_test_dataset(selected_model, models):
+    """Process test dataset (160 samples)"""
+    try:
+        train_data = load_train_test_data()
+        
+        if train_data is None:
+            st.error("❌ Test dataset not found. Please run split_dataset.py first.")
+            return
+        
+        X_test = train_data['X_test']
+        y_test = train_data['y_test']
+        
+        st.success(f"✅ Test dataset loaded: {X_test.shape[0]} rows, {X_test.shape[1]} columns")
+        
+        st.subheader("📋 Preview Test Data")
+        preview_df = X_test.head(10).copy()
+        preview_df['Actual_Yield'] = y_test[:10] if isinstance(y_test, pd.Series) else y_test[:10]
+        st.dataframe(preview_df, use_container_width=True)
+        
+        if st.button("🚀 Run Batch Prediction on Test Data", type="primary"):
+            with st.spinner("🔄 Processing predictions..."):
+                try:
+                    # Make predictions
+                    model = models[selected_model]
+                    predictions = model.predict(X_test)
+                    
+                    # Create results dataframe with original features
+                    y_test_values = y_test if isinstance(y_test, (list, pd.Series)) else y_test
+                    df_results = pd.DataFrame({
+                        'Fertilizer_Used': X_test['Fertilizer_Used'].values,
+                        'Irrigation_Used': X_test['Irrigation_Used'].values,
+                        'Rainfall_mm': X_test['Rainfall_mm'].values,
+                        'Temperature_Celsius': X_test['Temperature_Celsius'].values,
+                        'Days_to_Harvest': X_test['Days_to_Harvest'].values,
+                        'Actual_Yield': y_test_values,
+                        'Predicted_Yield': predictions,
+                        'Error': y_test_values - predictions,
+                        'Abs_Error': abs(y_test_values - predictions)
+                    })
+                    
+                    st.success("✅ Predictions completed!")
+                    
+                    # Display results
+                    st.subheader("📊 Prediction Results (First 20 rows)")
+                    st.dataframe(df_results.head(20), use_container_width=True)
+                    
+                    # Calculate metrics
+                    mae = mean_absolute_error(y_test, predictions)
+                    rmse = np.sqrt(mean_squared_error(y_test, predictions))
+                    r2 = r2_score(y_test, predictions)
+                    
+                    col1, col2, col3, col4 = st.columns(4)
+                    col1.metric("Total Samples", len(predictions))
+                    col2.metric("MAE", f"{mae:.3f}")
+                    col3.metric("RMSE", f"{rmse:.3f}")
+                    col4.metric("R² Score", f"{r2:.3f}")
+                    
+                    # Visualizations
+                    col1, col2 = st.columns(2)
+                    
+                    with col1:
+                        # Actual vs Predicted
+                        fig1 = go.Figure()
+                        fig1.add_trace(go.Scatter(
+                            x=y_test, 
+                            y=predictions,
+                            mode='markers',
+                            marker=dict(color='#667eea', size=8, opacity=0.6),
+                            name='Predictions'
+                        ))
+                        fig1.add_trace(go.Scatter(
+                            x=[y_test.min(), y_test.max()],
+                            y=[y_test.min(), y_test.max()],
+                            mode='lines',
+                            line=dict(color='#f87171', dash='dash', width=2),
+                            name='Perfect Prediction'
+                        ))
+                        fig1.update_layout(
+                            title='Actual vs Predicted Yield',
+                            xaxis_title='Actual Yield (tons/ha)',
+                            yaxis_title='Predicted Yield (tons/ha)',
+                            height=400,
+                            plot_bgcolor='#0f172a',
+                            paper_bgcolor='#0f172a',
+                            font=dict(color='#e5e7eb', family='Inter'),
+                            xaxis=dict(gridcolor='#1f2937'),
+                            yaxis=dict(gridcolor='#1f2937')
+                        )
+                        st.plotly_chart(fig1, use_container_width=True)
+                    
+                    with col2:
+                        # Error distribution
+                        fig2 = go.Figure()
+                        fig2.add_trace(go.Histogram(
+                            x=df_results['Error'],
+                            nbinsx=30,
+                            marker_color='#667eea',
+                            marker_line=dict(color='#764ba2', width=1)
+                        ))
+                        fig2.update_layout(
+                            title='Prediction Error Distribution',
+                            xaxis_title='Error (Actual - Predicted)',
+                            yaxis_title='Frequency',
+                            height=400,
+                            plot_bgcolor='#0f172a',
+                            paper_bgcolor='#0f172a',
+                            font=dict(color='#e5e7eb', family='Inter'),
+                            xaxis=dict(gridcolor='#1f2937'),
+                            yaxis=dict(gridcolor='#1f2937')
+                        )
+                        st.plotly_chart(fig2, use_container_width=True)
+                    
+                    # Download results
+                    csv = df_results.to_csv(index=False)
+                    st.download_button(
+                        label="📥 Download Test Predictions",
+                        data=csv,
+                        file_name=f"test_predictions_{selected_model}.csv",
+                        mime="text/csv",
+                        type="primary"
+                    )
+                    
+                except Exception as e:
+                    st.error(f"❌ Prediction error: {str(e)}")
+                    st.exception(e)
+    
+    except Exception as e:
+        st.error(f"❌ Error loading test dataset: {str(e)}")
+        st.exception(e)
 
 
 def _process_uploaded_file(uploaded_file, selected_model, models):

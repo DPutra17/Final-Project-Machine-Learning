@@ -26,27 +26,46 @@ def render_sidebar():
     
     st.sidebar.markdown("---")
     
-    # Navigation
+    # Navigation with query params routing
     page_list = list(PAGES.values())
     
-    # Check if navigation button was clicked from home page
-    if 'selected_page' in st.session_state:
-        default_page = st.session_state['selected_page']
-    else:
-        default_page = PAGES['home']
+    # Get current page from query params or session state
+    query_params = st.query_params
+    if 'page' in query_params:
+        current_page = query_params['page']
+        # Find matching page in PAGES
+        for key, value in PAGES.items():
+            if key == current_page or value == current_page:
+                st.session_state['selected_page'] = value
+                break
+    elif 'selected_page' not in st.session_state:
+        st.session_state['selected_page'] = PAGES['home']
     
-    default_index = page_list.index(default_page) if default_page in page_list else 0
+    # Get the current index
+    try:
+        current_index = page_list.index(st.session_state['selected_page'])
+    except ValueError:
+        current_index = 0
+        st.session_state['selected_page'] = PAGES['home']
     
     selected_page = st.sidebar.radio(
         "Select Page:",
         page_list,
-        index=default_index,
-        label_visibility="collapsed",
-        key="sidebar_navigation"
+        index=current_index,
+        label_visibility="collapsed"
     )
     
-    # Update selected page in session state
-    st.session_state['selected_page'] = selected_page
+    # Update session state and query params if selection changed
+    if selected_page != st.session_state['selected_page']:
+        st.session_state['selected_page'] = selected_page
+        # Find page key for query param
+        page_key = 'home'
+        for key, value in PAGES.items():
+            if value == selected_page:
+                page_key = key
+                break
+        st.query_params['page'] = page_key
+        st.rerun()
     
     # System status
     st.sidebar.markdown("---")
