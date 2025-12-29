@@ -20,14 +20,17 @@ venv/
 *.swp
 *.swo
 
-# Model files (hasil training)
-models/
-*.pkl
-*.joblib
-*.h5
-*.pb
-*.onnx
-*.json
+# Model files (hasil training) - exclude trained models but keep Python code
+models/*.pkl
+models/*.joblib
+models/*.h5
+models/*.pb
+models/*.onnx
+models/*.json
+# Keep Python files in models/ directory
+!models/*.py
+!models/__pycache__/
+!models/__init__.py
 
 # Data files (processed data)
 data/X_train.csv

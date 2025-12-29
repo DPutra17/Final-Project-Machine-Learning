@@ -74,7 +74,12 @@ def _process_test_dataset(selected_model, models):
                     predictions = model.predict(X_test)
                     
                     # Create results dataframe with original features
-                    y_test_values = y_test if isinstance(y_test, (list, pd.Series)) else y_test
+                    # Convert y_test to Series if it's a DataFrame
+                    if isinstance(y_test, pd.DataFrame):
+                        y_test_values = y_test.iloc[:, 0].values  # Get first column as numpy array
+                    else:
+                        y_test_values = y_test if isinstance(y_test, (list, pd.Series)) else y_test
+                    
                     df_results = pd.DataFrame({
                         'Fertilizer_Used': X_test['Fertilizer_Used'].values,
                         'Irrigation_Used': X_test['Irrigation_Used'].values,
@@ -94,9 +99,12 @@ def _process_test_dataset(selected_model, models):
                     st.dataframe(df_results.head(20), use_container_width=True)
                     
                     # Calculate metrics
-                    mae = mean_absolute_error(y_test, predictions)
-                    rmse = np.sqrt(mean_squared_error(y_test, predictions))
-                    r2 = r2_score(y_test, predictions)
+                    # Convert y_test to 1D array if it's a DataFrame
+                    y_true = y_test.iloc[:, 0].values if isinstance(y_test, pd.DataFrame) else y_test
+                    
+                    mae = mean_absolute_error(y_true, predictions)
+                    rmse = np.sqrt(mean_squared_error(y_true, predictions))
+                    r2 = r2_score(y_true, predictions)
                     
                     col1, col2, col3, col4 = st.columns(4)
                     col1.metric("Total Samples", len(predictions))

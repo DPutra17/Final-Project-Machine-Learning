@@ -119,7 +119,7 @@ def render():
                 features = pd.DataFrame([row], columns=train_columns)
                 
                 # Make prediction
-                prediction = predict(models[selected_model], selected_model, features)[0]
+                prediction = predict(models[selected_model], features)[0]
                 
                 # Display Results
                 st.markdown("---")

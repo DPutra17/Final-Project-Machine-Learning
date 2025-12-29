@@ -178,10 +178,11 @@ def _render_detailed_analysis(models, metrics_df):
                 
                 if 'X_test' in data and 'y_test' in data:
                     X_test = data['X_test']
-                    y_test = data['y_test']
+                    # Convert y_test to 1D array if it's a DataFrame
+                    y_test = data['y_test'].iloc[:, 0].values if isinstance(data['y_test'], pd.DataFrame) else data['y_test']
                     
                     # Make prediction
-                    y_pred = predict(models[selected_model], selected_model, X_test)
+                    y_pred = predict(models[selected_model], X_test)
                     
                     # Calculate metrics
                     r2 = r2_score(y_test, y_pred)
