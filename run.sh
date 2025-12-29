@@ -63,7 +63,8 @@ elif [ "$MODE" = "app" ]; then
 fi
 
 # FIX: Menambahkan direktori saat ini ke PYTHONPATH agar folder 'models' terbaca
-export PYTHONPATH=$PYTHONPATH:$(pwd)
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+export PYTHONPATH="${PYTHONPATH}:${SCRIPT_DIR}"
 
 # Menjalankan aplikasi atau notebook dari root directory
 if [ "$MODE" = "notebook" ]; then

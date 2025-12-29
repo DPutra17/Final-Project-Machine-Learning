@@ -44,6 +44,11 @@ if "%MODE%"=="notebook" (
     echo ========================================
     echo.
 
+    REM FIX: Add current directory to PYTHONPATH so models module can be found
+    set "SCRIPT_DIR=%~dp0"
+    set "SCRIPT_DIR=%SCRIPT_DIR:~0,-1%"
+    set PYTHONPATH=%PYTHONPATH%;%SCRIPT_DIR%
+
     jupyter notebook
 
     if errorlevel 1 (
@@ -67,6 +72,11 @@ if "%MODE%"=="notebook" (
     echo Executing notebooks in sequence...
     echo ========================================
     echo.
+
+    REM FIX: Add current directory to PYTHONPATH so models module can be found
+    set "SCRIPT_DIR=%~dp0"
+    set "SCRIPT_DIR=%SCRIPT_DIR:~0,-1%"
+    set PYTHONPATH=%PYTHONPATH%;%SCRIPT_DIR%
 
     echo [1/3] Executing EDA_Preprocessing.ipynb...
     echo.
@@ -121,6 +131,11 @@ if "%MODE%"=="notebook" (
     echo ========================================
     echo.
 
+    REM FIX: Add current directory to PYTHONPATH so models module can be found
+    set "SCRIPT_DIR=%~dp0"
+    set "SCRIPT_DIR=%SCRIPT_DIR:~0,-1%"
+    set PYTHONPATH=%PYTHONPATH%;%SCRIPT_DIR%
+
     echo [1/3] Executing EDA_Preprocessing.ipynb...
     echo.
     jupyter nbconvert --execute --to notebook --inplace notebooks/EDA_Preprocessing.ipynb
@@ -165,6 +180,11 @@ if "%MODE%"=="notebook" (
     echo Press Ctrl+C to stop the server.
     echo ========================================
     echo.
+
+    REM FIX: Add current directory to PYTHONPATH so models module can be found
+    set "SCRIPT_DIR=%~dp0"
+    set "SCRIPT_DIR=%SCRIPT_DIR:~0,-1%"
+    set PYTHONPATH=%PYTHONPATH%;%SCRIPT_DIR%
 
     streamlit run src/app.py
 
