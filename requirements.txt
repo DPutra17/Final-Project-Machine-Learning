@@ -10,3 +10,4 @@ streamlit
 plotly
 joblib
 nbconvert
+ipykernel

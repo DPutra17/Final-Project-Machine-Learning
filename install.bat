@@ -28,12 +28,19 @@ if errorlevel 1 (
 echo.
 
 echo [3/3] Verifying installation...
-python -c "import streamlit, xgboost, lightgbm, pandas, numpy, sklearn, shap" 2>nul
+python -c "import streamlit, xgboost, lightgbm, pandas, numpy, sklearn, shap, jupyter, nbconvert, ipykernel" 2>nul
 if errorlevel 1 (
     echo WARNING: Some packages may not be installed correctly.
     echo Please check the error messages above.
     pause
     exit /b 1
+)
+echo.
+
+echo [4/4] Setting up Jupyter kernel...
+python -m ipykernel install --user --name python3 --display-name "Python 3" 2>nul
+if errorlevel 1 (
+    echo WARNING: Could not register Jupyter kernel.
 )
 echo.
 

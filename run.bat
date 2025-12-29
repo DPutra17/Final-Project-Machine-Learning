@@ -27,10 +27,10 @@ echo.
 
 if "%MODE%"=="notebook" (
     echo Checking if Jupyter and nbconvert are installed...
-    python -c "import jupyter, nbconvert" 2>nul
+    python -c "import jupyter, nbconvert, ipykernel" 2>nul
     if errorlevel 1 (
-        echo ERROR: Jupyter or nbconvert is not installed!
-        echo Please install with: pip install jupyter nbconvert
+        echo ERROR: Jupyter, nbconvert, or ipykernel is not installed!
+        echo Please install with: pip install jupyter nbconvert ipykernel
         echo.
         pause
         exit /b 1
@@ -55,10 +55,10 @@ if "%MODE%"=="notebook" (
     )
 ) else if "%MODE%"=="execute" (
     echo Checking if Jupyter and nbconvert are installed...
-    python -c "import jupyter, nbconvert" 2>nul
+    python -c "import jupyter, nbconvert, ipykernel" 2>nul
     if errorlevel 1 (
-        echo ERROR: Jupyter or nbconvert is not installed!
-        echo Please install with: pip install jupyter nbconvert
+        echo ERROR: Jupyter, nbconvert, or ipykernel is not installed!
+        echo Please install with: pip install jupyter nbconvert ipykernel
         echo.
         pause
         exit /b 1
@@ -68,18 +68,7 @@ if "%MODE%"=="notebook" (
     echo ========================================
     echo.
 
-    echo [1/3] Executing Baseline_Model.ipynb...
-    echo.
-    jupyter nbconvert --execute --to notebook --inplace notebooks/Baseline_Model.ipynb
-    if errorlevel 1 (
-        echo ERROR: Failed to execute Baseline_Model.ipynb
-        pause
-        exit /b 1
-    )
-    echo Baseline_Model.ipynb executed successfully!
-    echo.
-
-    echo [2/3] Executing EDA_Preprocessing.ipynb...
+    echo [1/3] Executing EDA_Preprocessing.ipynb...
     echo.
     jupyter nbconvert --execute --to notebook --inplace notebooks/EDA_Preprocessing.ipynb
     if errorlevel 1 (
@@ -88,6 +77,17 @@ if "%MODE%"=="notebook" (
         exit /b 1
     )
     echo EDA_Preprocessing.ipynb executed successfully!
+    echo.
+
+    echo [2/3] Executing Baseline_Model.ipynb...
+    echo.
+    jupyter nbconvert --execute --to notebook --inplace notebooks/Baseline_Model.ipynb
+    if errorlevel 1 (
+        echo ERROR: Failed to execute Baseline_Model.ipynb
+        pause
+        exit /b 1
+    )
+    echo Baseline_Model.ipynb executed successfully!
     echo.
 
     echo [3/3] Executing Final_Model_XGBoost.ipynb...
@@ -108,9 +108,9 @@ if "%MODE%"=="notebook" (
     pause
 ) else (
     echo Checking if packages are installed...
-    python -c "import streamlit, jupyter, nbconvert" 2>nul
+    python -c "import streamlit, jupyter, nbconvert, ipykernel" 2>nul
     if errorlevel 1 (
-        echo ERROR: Required packages ^(streamlit, jupyter, nbconvert^) are not installed!
+        echo ERROR: Required packages ^(streamlit, jupyter, nbconvert, ipykernel^) are not installed!
         echo Please run install.bat first.
         echo.
         pause
@@ -121,18 +121,7 @@ if "%MODE%"=="notebook" (
     echo ========================================
     echo.
 
-    echo [1/3] Executing Baseline_Model.ipynb...
-    echo.
-    jupyter nbconvert --execute --to notebook --inplace notebooks/Baseline_Model.ipynb
-    if errorlevel 1 (
-        echo ERROR: Failed to execute Baseline_Model.ipynb
-        pause
-        exit /b 1
-    )
-    echo Baseline_Model.ipynb executed successfully!
-    echo.
-
-    echo [2/3] Executing EDA_Preprocessing.ipynb...
+    echo [1/3] Executing EDA_Preprocessing.ipynb...
     echo.
     jupyter nbconvert --execute --to notebook --inplace notebooks/EDA_Preprocessing.ipynb
     if errorlevel 1 (
@@ -141,6 +130,17 @@ if "%MODE%"=="notebook" (
         exit /b 1
     )
     echo EDA_Preprocessing.ipynb executed successfully!
+    echo.
+
+    echo [2/3] Executing Baseline_Model.ipynb...
+    echo.
+    jupyter nbconvert --execute --to notebook --inplace notebooks/Baseline_Model.ipynb
+    if errorlevel 1 (
+        echo ERROR: Failed to execute Baseline_Model.ipynb
+        pause
+        exit /b 1
+    )
+    echo Baseline_Model.ipynb executed successfully!
     echo.
 
     echo [3/3] Executing Final_Model_XGBoost.ipynb...

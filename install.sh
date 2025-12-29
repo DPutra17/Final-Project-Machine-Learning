@@ -32,11 +32,18 @@ fi
 
 echo ""
 echo "[3/3] Verifying installation..." [cite: 9]
-python -c "import streamlit, xgboost, lightgbm, pandas, numpy, sklearn, shap" 2>/dev/null
+python -c "import streamlit, xgboost, lightgbm, pandas, numpy, sklearn, shap, jupyter, nbconvert, ipykernel" 2>/dev/null
 
 if [ $? -ne 0 ]; then
     echo "WARNING: Some packages may not be installed correctly." [cite: 9]
     exit 1
+fi
+
+echo ""
+echo "[4/4] Setting up Jupyter kernel..."
+python -m ipykernel install --user --name python3 --display-name "Python 3" 2>/dev/null
+if [ $? -ne 0 ]; then
+    echo "WARNING: Could not register Jupyter kernel."
 fi
 
 echo ""
