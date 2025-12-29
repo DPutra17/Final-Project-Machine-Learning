@@ -1,3 +1,11 @@
+import sys
+import os
+from pathlib import Path
+
+# Add project root to Python path
+project_root = Path(__file__).parent.parent
+sys.path.insert(0, str(project_root))
+
 import streamlit as st
 
 from config.settings import APP_TITLE, APP_ICON, APP_LAYOUT, PAGES

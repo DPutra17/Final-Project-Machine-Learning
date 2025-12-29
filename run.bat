@@ -45,8 +45,7 @@ if "%MODE%"=="notebook" (
     echo.
 
     REM FIX: Add current directory to PYTHONPATH so models module can be found
-    set "SCRIPT_DIR=%~dp0"
-    set "SCRIPT_DIR=%SCRIPT_DIR:~0,-1%"
+    for %%i in ("%~dp0.") do set "SCRIPT_DIR=%%~fi"
     set PYTHONPATH=%PYTHONPATH%;%SCRIPT_DIR%
 
     jupyter notebook
@@ -74,8 +73,7 @@ if "%MODE%"=="notebook" (
     echo.
 
     REM FIX: Add current directory to PYTHONPATH so models module can be found
-    set "SCRIPT_DIR=%~dp0"
-    set "SCRIPT_DIR=%SCRIPT_DIR:~0,-1%"
+    for %%i in ("%~dp0.") do set "SCRIPT_DIR=%%~fi"
     set PYTHONPATH=%PYTHONPATH%;%SCRIPT_DIR%
 
     echo [1/3] Executing EDA_Preprocessing.ipynb...
@@ -132,8 +130,7 @@ if "%MODE%"=="notebook" (
     echo.
 
     REM FIX: Add current directory to PYTHONPATH so models module can be found
-    set "SCRIPT_DIR=%~dp0"
-    set "SCRIPT_DIR=%SCRIPT_DIR:~0,-1%"
+    for %%i in ("%~dp0.") do set "SCRIPT_DIR=%%~fi"
     set PYTHONPATH=%PYTHONPATH%;%SCRIPT_DIR%
 
     echo [1/3] Executing EDA_Preprocessing.ipynb...
@@ -182,8 +179,7 @@ if "%MODE%"=="notebook" (
     echo.
 
     REM FIX: Add current directory to PYTHONPATH so models module can be found
-    set "SCRIPT_DIR=%~dp0"
-    set "SCRIPT_DIR=%SCRIPT_DIR:~0,-1%"
+    for %%i in ("%~dp0.") do set "SCRIPT_DIR=%%~fi"
     set PYTHONPATH=%PYTHONPATH%;%SCRIPT_DIR%
 
     streamlit run src/app.py
