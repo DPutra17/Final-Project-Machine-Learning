@@ -1,34 +1,177 @@
 @echo off
 echo ========================================
 echo  Crop Yield Prediction System
-echo  Starting Application...
 echo ========================================
 echo.
 
-echo Checking if packages are installed...
-python -c "import streamlit" 2>nul
-if errorlevel 1 (
-    echo ERROR: Streamlit is not installed!
-    echo Please run install.bat first.
+set MODE=%1
+if "%MODE%"=="" set MODE=app
+
+if "%MODE%"=="notebook" (
+    echo  Starting Jupyter Notebook...
+) else if "%MODE%"=="execute" (
+    echo  Executing Jupyter Notebooks...
+) else if "%MODE%"=="app" (
+    echo  Starting Application with Notebooks...
+) else (
+    echo Usage: run.bat [app^|notebook^|execute]
+    echo   app      - Start Streamlit application with notebooks ^(default^)
+    echo   notebook - Start Jupyter Notebook server
+    echo   execute  - Execute all Jupyter notebooks
     echo.
     pause
     exit /b 1
 )
-
-echo Starting Streamlit server...
-echo.
-echo The app will open in your browser automatically.
-echo If not, open: http://localhost:8501
-echo.
-echo Press Ctrl+C to stop the server.
 echo ========================================
 echo.
 
-streamlit run src/app.py
+if "%MODE%"=="notebook" (
+    echo Checking if Jupyter and nbconvert are installed...
+    python -c "import jupyter, nbconvert" 2>nul
+    if errorlevel 1 (
+        echo ERROR: Jupyter or nbconvert is not installed!
+        echo Please install with: pip install jupyter nbconvert
+        echo.
+        pause
+        exit /b 1
+    )
 
-if errorlevel 1 (
+    echo Starting Jupyter Notebook server...
     echo.
-    echo ERROR: Failed to start the application!
-    echo Please check the error messages above.
+    echo The notebook will open in your browser automatically.
+    echo.
+    echo Press Ctrl+C to stop the server.
+    echo ========================================
+    echo.
+
+    jupyter notebook
+
+    if errorlevel 1 (
+        echo.
+        echo ERROR: Failed to start Jupyter Notebook!
+        echo Please check the error messages above.
+        echo.
+        pause
+    )
+) else if "%MODE%"=="execute" (
+    echo Checking if Jupyter and nbconvert are installed...
+    python -c "import jupyter, nbconvert" 2>nul
+    if errorlevel 1 (
+        echo ERROR: Jupyter or nbconvert is not installed!
+        echo Please install with: pip install jupyter nbconvert
+        echo.
+        pause
+        exit /b 1
+    )
+
+    echo Executing notebooks in sequence...
+    echo ========================================
+    echo.
+
+    echo [1/3] Executing Baseline_Model.ipynb...
+    echo.
+    jupyter nbconvert --execute --to notebook --inplace notebooks/Baseline_Model.ipynb
+    if errorlevel 1 (
+        echo ERROR: Failed to execute Baseline_Model.ipynb
+        pause
+        exit /b 1
+    )
+    echo Baseline_Model.ipynb executed successfully!
+    echo.
+
+    echo [2/3] Executing EDA_Preprocessing.ipynb...
+    echo.
+    jupyter nbconvert --execute --to notebook --inplace notebooks/EDA_Preprocessing.ipynb
+    if errorlevel 1 (
+        echo ERROR: Failed to execute EDA_Preprocessing.ipynb
+        pause
+        exit /b 1
+    )
+    echo EDA_Preprocessing.ipynb executed successfully!
+    echo.
+
+    echo [3/3] Executing Final_Model_XGBoost.ipynb...
+    echo.
+    jupyter nbconvert --execute --to notebook --inplace notebooks/Final_Model_XGBoost.ipynb
+    if errorlevel 1 (
+        echo ERROR: Failed to execute Final_Model_XGBoost.ipynb
+        pause
+        exit /b 1
+    )
+    echo Final_Model_XGBoost.ipynb executed successfully!
+    echo.
+
+    echo ========================================
+    echo All notebooks executed successfully!
+    echo ========================================
+    echo.
     pause
+) else (
+    echo Checking if packages are installed...
+    python -c "import streamlit, jupyter, nbconvert" 2>nul
+    if errorlevel 1 (
+        echo ERROR: Required packages ^(streamlit, jupyter, nbconvert^) are not installed!
+        echo Please run install.bat first.
+        echo.
+        pause
+        exit /b 1
+    )
+
+    echo Executing notebooks first...
+    echo ========================================
+    echo.
+
+    echo [1/3] Executing Baseline_Model.ipynb...
+    echo.
+    jupyter nbconvert --execute --to notebook --inplace notebooks/Baseline_Model.ipynb
+    if errorlevel 1 (
+        echo ERROR: Failed to execute Baseline_Model.ipynb
+        pause
+        exit /b 1
+    )
+    echo Baseline_Model.ipynb executed successfully!
+    echo.
+
+    echo [2/3] Executing EDA_Preprocessing.ipynb...
+    echo.
+    jupyter nbconvert --execute --to notebook --inplace notebooks/EDA_Preprocessing.ipynb
+    if errorlevel 1 (
+        echo ERROR: Failed to execute EDA_Preprocessing.ipynb
+        pause
+        exit /b 1
+    )
+    echo EDA_Preprocessing.ipynb executed successfully!
+    echo.
+
+    echo [3/3] Executing Final_Model_XGBoost.ipynb...
+    echo.
+    jupyter nbconvert --execute --to notebook --inplace notebooks/Final_Model_XGBoost.ipynb
+    if errorlevel 1 (
+        echo ERROR: Failed to execute Final_Model_XGBoost.ipynb
+        pause
+        exit /b 1
+    )
+    echo Final_Model_XGBoost.ipynb executed successfully!
+    echo.
+
+    echo ========================================
+    echo Notebooks executed successfully!
+    echo Starting Streamlit application...
+    echo ========================================
+    echo.
+    echo The app will open in your browser automatically.
+    echo If not, open: http://localhost:8501
+    echo.
+    echo Press Ctrl+C to stop the server.
+    echo ========================================
+    echo.
+
+    streamlit run src/app.py
+
+    if errorlevel 1 (
+        echo.
+        echo ERROR: Failed to start the application!
+        echo Please check the error messages above.
+        pause
+    )
 )
