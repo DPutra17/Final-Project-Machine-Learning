@@ -128,6 +128,10 @@ def _render_metrics_comparison(model1, model2, metrics1, metrics2):
 
 def _render_visual_comparison(model1, model2, y_test, pred1, pred2):
     """Render visual comparison charts"""
+    # Convert y_test to numpy array if it's a DataFrame
+    if hasattr(y_test, 'values'):
+        y_test = y_test.values.flatten()
+    
     col1, col2 = st.columns(2)
     
     with col1:
@@ -191,6 +195,10 @@ def _render_visual_comparison(model1, model2, y_test, pred1, pred2):
 
 def _render_direct_comparison(model1, model2, y_test, pred1, pred2):
     """Render direct comparison scatter plot"""
+    # Convert y_test to numpy array if it's a DataFrame
+    if hasattr(y_test, 'values'):
+        y_test = y_test.values.flatten()
+    
     st.subheader("🔄 Direct Prediction Comparison")
     fig = go.Figure()
     fig.add_trace(go.Scatter(
